@@ -1,5 +1,4 @@
 package kingdoms.biome;
-
 import java.util.Random;
 
 public class BiomeMap {

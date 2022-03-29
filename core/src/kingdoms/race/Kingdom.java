@@ -5,9 +5,7 @@ import kingdoms.tile.BuildingTile;
 import kingdoms.tile.Tile;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Map;
-
 
 public class Kingdom {
     private final Biome occupiedBiome;

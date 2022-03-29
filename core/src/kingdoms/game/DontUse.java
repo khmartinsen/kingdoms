@@ -10,26 +10,23 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
-import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
-import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import kingdoms.biome.BiomeMap;
 import kingdoms.biome.BiomeTile;
 import kingdoms.tile.Tile;
 
-import static kingdoms.biome.BiomeTile.*;
-
-public class Game extends ApplicationAdapter {
+public class DontUse extends ApplicationAdapter {
 	Texture tiles;
 	TiledMap map;
 	TiledMapRenderer renderer;
 	OrthographicCamera camera;
 	SpriteBatch batch;
 	BitmapFont font;
-	
+
 	@Override
 	public void create () {
 		font = new BitmapFont();
@@ -98,6 +95,19 @@ public class Game extends ApplicationAdapter {
 		batch.begin();
 		font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, Gdx.graphics.getHeight() - 20);
 		batch.end();
+
+		if (Gdx.input.isTouched()) {
+			// after unprojecting the correct position is given for the input to choose a tile in the tile map
+			Vector3 touchPos = new Vector3();
+			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+			camera.unproject(touchPos);
+
+			TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(0);
+
+			Cell cell = new Cell();
+
+			layer.setCell((int)touchPos.x, (int)touchPos.y, cell);
+		}
 	}
 	
 	@Override
