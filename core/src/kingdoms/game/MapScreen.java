@@ -18,6 +18,7 @@ import kingdoms.biome.Biome;
 import kingdoms.biome.BiomeMap;
 import kingdoms.biome.Forest;
 import kingdoms.biome.Plain;
+import kingdoms.race.Humans;
 
 public class MapScreen implements Screen {
     final GameName game;
@@ -28,12 +29,17 @@ public class MapScreen implements Screen {
     BiomeMap biomeMap;
 
 
-    public MapScreen(final GameName game) {
+    public MapScreen(final GameName game) { //take Race input for each player
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 5,5);
 
+        // Create the map of biomes
         biomeMap = new BiomeMap(5, 5);
+
+        game.player = new Humans("Kevin", biomeMap.getBiome(0,0));
+        // Create starting player buildings
+        //game.player.setup();
 
         mapTiles = new Texture(Gdx.files.internal("Garden-TileSet.png"));
         TextureRegion[][] splitTiles = TextureRegion.split(mapTiles, 16,16);
@@ -44,18 +50,18 @@ public class MapScreen implements Screen {
         for (int y = 0; y < 5; y++) {
             for (int x = 0; x < 5; x++) {
                 Biome currentBiome = biomeMap.getBiome(y,x);
-                TextureRegion speicificTexture;
+                TextureRegion specificTexture;
                 if (currentBiome instanceof Forest) {
-                    speicificTexture = splitTiles[7][6];
+                    specificTexture = splitTiles[7][6];
                 }
                 else if (currentBiome instanceof Plain) {
-                    speicificTexture = splitTiles[1][2];
+                    specificTexture = splitTiles[1][2];
                 }
                 else {
-                    speicificTexture = splitTiles[0][0];
+                    specificTexture = splitTiles[0][0];
                 }
                 TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();
-                cell.setTile(new StaticTiledMapTile(speicificTexture));
+                cell.setTile(new StaticTiledMapTile(specificTexture));
                 layer.setCell(x,y, cell);
             }
         }

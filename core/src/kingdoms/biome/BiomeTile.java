@@ -17,7 +17,5 @@ public enum BiomeTile implements Tile {
         this.tileString = tileString;
     }
 
-    public String printTile () { return tileString; }
-
 }
 

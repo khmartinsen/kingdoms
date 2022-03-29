@@ -50,6 +50,13 @@ public class Humans extends Race {
         kingdoms.add(new Kingdom(newBiome, defaultResources));
     }
 
+    @Override
+    public void setup() {
+        // game start setup, NEEDS TO BE REWORKED to be smart
+        getBiomes().get(0).replaceTile(HumanBuilding.CASTLE,10,10);
+        //inform mapScreen so we can draw a castle on the map screen?
+    }
+
     /**
      * (NOT IMPLEMENTED YET)
      * Checks the conditions for race Humans to win.

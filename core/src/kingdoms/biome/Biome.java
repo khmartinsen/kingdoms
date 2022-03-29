@@ -9,8 +9,6 @@ public abstract class Biome {
     private int[] tileOffset;
     private final String mapTile;
     private final int[] mapLocation;
-    // count of each tile type?
-    private static final String ANSI_BLACK_BACKGROUND = "\u001B[49m";
     protected Random rnd = new Random();
 
     Biome(String mapTile, int row, int col) {
@@ -64,23 +62,6 @@ public abstract class Biome {
         return mapLocation;
     }
 
-    /**
-     * Puts the biome tiles into a String[] by their row to be used in a printing method.
-     * Calls printTile() which contains an ANSI background coloring.
-     * ANSI_BLACK_BACKGROUND is appended at the end to "reset" back to default background.
-     * @return
-     */
-    public String[] toStringArray() {
-        String[] biomeString = new String[tiles.length];
-        for (int i = 0; i < tiles.length; i++) {
-            StringBuilder line = new StringBuilder();
-            for (int j = 0; j < tiles[i].length; j++) {
-                line.append(tiles[i][j].printTile() + " " + ANSI_BLACK_BACKGROUND);
-            }
-            biomeString[i] = line.toString();
-        }
-        return biomeString;
-    }
 
     /**
      * Used by Biome subclasses to generate the tiles in their biome.

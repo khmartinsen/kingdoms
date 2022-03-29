@@ -45,7 +45,7 @@ public abstract class Race {
         return null;
     }
 
-    public ArrayList<Biome> getBiomes() {
+    public ArrayList<Biome> getBiomes() { // can we use a map here?
         ArrayList<Biome> playerBiomes = new ArrayList<Biome>();
         for (Kingdom kingdom: kingdoms) {
             playerBiomes.add(kingdom.getBiome());
@@ -65,4 +65,6 @@ public abstract class Race {
     public abstract void addKingdom(Biome newBiome);
 
     public abstract boolean checkWin();
+
+    public abstract void setup();
 }
