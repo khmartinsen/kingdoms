@@ -50,8 +50,4 @@ public enum HumanBuilding implements BuildingTile {
         return resourceCost;
     }
 
-    @Override
-    public String printTile() {
-        return ANSI_YELLOW_BACKGROUND + tileString;
-    }
 }

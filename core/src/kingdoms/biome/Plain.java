@@ -7,14 +7,14 @@ import static kingdoms.biome.BiomeTile.*;
 
 public class Plain extends Biome {
     public Plain(int row, int col) {
-        super("P", row, col);
+        super(MapTile.PLAIN, row, col);
         generateBiomeTiles();
     }
 
     @Override
     protected void generateBiomeTiles() {
         // base it on number of total tiles
-        int forestGrowths = rnd.nextInt(3) + 5; // rename to grass
+        int forestGrowths = 0; // rename to grass
         int rockGrowths = 5;
         int waterGrowths = 2;
 

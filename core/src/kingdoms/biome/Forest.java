@@ -6,11 +6,10 @@ import java.util.Random;
 import static kingdoms.biome.BiomeTile.*;
 
 public class Forest extends Biome {
-    //Random rnd = new Random();
     // int forestGrowths here?
 
     public Forest(int row, int col) {
-        super("F", row, col);
+        super(MapTile.FOREST, row, col);
         generateBiomeTiles();
     }
 
@@ -23,12 +22,12 @@ public class Forest extends Biome {
 
         // create a TREE filled biome first
         for (kingdoms.tile.Tile[] tilesRow : tiles) {
-            Arrays.fill(tilesRow, TREE);
+            Arrays.fill(tilesRow, GRASS);
         }
 
         // grow GRASS numTreeGrowths times
         for (int i = 0; i < forestGrowths; i++) {
-            this.tileGrow(GRASS, 50);
+            this.tileGrow(TREE, 30);
         }
 
         // rock generation
@@ -38,7 +37,7 @@ public class Forest extends Biome {
 
         // water generation
         for (int i = 0; i < waterGrowths; i++) {
-            this.tileGrow(WATER, 30);
+            this.tileGrow(WATER, 10);
         }
     }
 }

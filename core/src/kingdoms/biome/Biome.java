@@ -7,11 +7,11 @@ import java.util.Random;
 public abstract class Biome {
     protected Tile[][] tiles; //maybe just int?
     private int[] tileOffset;
-    private final String mapTile;
+    private final MapTile mapTile;
     private final int[] mapLocation;
     protected Random rnd = new Random();
 
-    Biome(String mapTile, int row, int col) {
+    Biome(MapTile mapTile, int row, int col) {
         this.mapTile = mapTile;
         mapLocation = new int[]{row, col};
         generateBiomeShape();
@@ -54,7 +54,7 @@ public abstract class Biome {
         return true;
     }
 
-    public String getMapTile() {
+    public MapTile getMapTile() {
         return mapTile;
     }
 

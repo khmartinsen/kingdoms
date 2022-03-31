@@ -10,6 +10,7 @@ import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Vector3;
@@ -22,17 +23,16 @@ import kingdoms.race.Humans;
 
 public class MapScreen implements Screen {
     final GameName game;
-    OrthographicCamera camera;
+    OrthographicCamera camera = new OrthographicCamera();
     TiledMapRenderer renderer;
-    TiledMap map;
-    Texture mapTiles;
+    TiledMap map = new TiledMap();
     BiomeMap biomeMap;
 
 
     public MapScreen(final GameName game) { //take Race input for each player
         this.game = game;
-        camera = new OrthographicCamera();
         camera.setToOrtho(false, 5,5);
+        camera.update();
 
         // Create the map of biomes
         biomeMap = new BiomeMap(5, 5);
@@ -41,34 +41,21 @@ public class MapScreen implements Screen {
         // Create starting player buildings
         //game.player.setup();
 
-        mapTiles = new Texture(Gdx.files.internal("Garden-TileSet.png"));
-        TextureRegion[][] splitTiles = TextureRegion.split(mapTiles, 16,16);
-        map = new TiledMap();
         MapLayers layers = map.getLayers();
         TiledMapTileLayer layer = new TiledMapTileLayer(5, 5, 16, 16);
+        layer.setName("map");
 
         for (int y = 0; y < 5; y++) {
             for (int x = 0; x < 5; x++) {
                 Biome currentBiome = biomeMap.getBiome(y,x);
-                TextureRegion specificTexture;
-                if (currentBiome instanceof Forest) {
-                    specificTexture = splitTiles[7][6];
-                }
-                else if (currentBiome instanceof Plain) {
-                    specificTexture = splitTiles[1][2];
-                }
-                else {
-                    specificTexture = splitTiles[0][0];
-                }
                 TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();
-                cell.setTile(new StaticTiledMapTile(specificTexture));
+                cell.setTile(game.mapTileSet.getTile(currentBiome.getMapTile().ordinal()));
                 layer.setCell(x,y, cell);
             }
         }
-
         layers.add(layer);
-        renderer = new OrthogonalTiledMapRenderer(map, 1/16f);
 
+        renderer = new OrthogonalTiledMapRenderer(map, 1/16f);
     }
 
     @Override
@@ -85,6 +72,7 @@ public class MapScreen implements Screen {
         renderer.render();
 
         game.batch.begin();
+        game.font.draw(game.batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, Gdx.graphics.getHeight() - 20);
         game.batch.end();
 
 
@@ -118,7 +106,6 @@ public class MapScreen implements Screen {
 
     @Override
     public void dispose() {
-        mapTiles.dispose();
         map.dispose();
     }
 }
