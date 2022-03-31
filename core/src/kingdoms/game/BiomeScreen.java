@@ -28,6 +28,7 @@ public class BiomeScreen implements Screen {
         this.biome = biome;
         this.game = game;
 
+
         camera.setToOrtho(false, 20,20);
         camera.update();
 
@@ -59,22 +60,9 @@ public class BiomeScreen implements Screen {
 
     @Override
     public void render(float delta) {
-
         Vector3 cursorPos = new Vector3();
         cursorPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(cursorPos);
-
-        // tile glow at cursor type thing. Should be a function in biome screen and map screen
-        // overload with a custom texture (pass building tiles and stuff that we should be using to show
-        // what could be built
-        /*
-        MapLayers layers = map.getLayers();
-        TiledMapTileLayer layer = new TiledMapTileLayer(20,20,16,16);
-        layer.setCell((int)cursorPos.x, (int)cursorPos.y, new Cell().setTile(new StaticTiledMapTile(testGlow)));
-        map.getLayers().remove(1);
-        layers.add(layer);
-        */
-
 
         ScreenUtils.clear(0,0,0,1);
         camera.update();
@@ -85,11 +73,20 @@ public class BiomeScreen implements Screen {
             game.returnToMapScreen();
             dispose();
         }
+
+        game.batch.setProjectionMatrix(camera.combined);
+        game.batch.begin();
+        highlightTile();
+        game.batch.end();
     }
 
     @Override
     public void resize(int width, int height) {
-
+    /* doesnt resize.
+        camera.viewportWidth = width / 16f;
+        camera.viewportHeight = height / 16f;
+        camera.update();
+    */
     }
 
     @Override
@@ -110,5 +107,23 @@ public class BiomeScreen implements Screen {
     @Override
     public void dispose() {
         map.dispose();
+    }
+
+    private void highlightTile() {
+        Vector3 position = new Vector3();
+        position.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        camera.unproject(position);
+        position.x = (int)position.x;
+        position.y = (int)position.y;
+        game.batch.draw(game.mapTileSet.getTile(3).getTextureRegion(), position.x, position.y, 1, 1);
+    }
+
+    private void highlightTile(TextureRegion texture) {
+        Vector3 position = new Vector3();
+        position.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        camera.unproject(position);
+        position.x = (int)position.x;
+        position.y = (int)position.y;
+        game.batch.draw(texture, position.x, position.y, 1, 1);
     }
 }

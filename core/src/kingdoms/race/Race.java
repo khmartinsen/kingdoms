@@ -17,11 +17,11 @@ public abstract class Race {
     // should default resources defined here?
 
 
-    Race(String raceName, String playerName, BuildingTile[] raceBuildings, Kingdom startLocation) {
+    Race(String raceName, String playerName, BuildingTile[] raceBuildings, Biome startBiome) {
         this.raceName = raceName;
         this.playerName = playerName;
         this.raceBuildings = raceBuildings;
-        kingdoms.add(startLocation);
+        addKingdom(startBiome);
     }
 
     public String getRaceName() {
@@ -51,6 +51,14 @@ public abstract class Race {
             playerBiomes.add(kingdom.getBiome());
         }
         return playerBiomes;
+    }
+
+    public ArrayList<Biome> getVisibleBiomes() {
+        return visibleBiomes;
+    }
+
+    public void addVisibleBiome(Biome biome) {
+        visibleBiomes.add(biome);
     }
 
     /**

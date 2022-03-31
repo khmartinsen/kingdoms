@@ -15,6 +15,7 @@ import java.util.Map;
 
 public class GameName extends Game {
     public SpriteBatch batch;
+    public SpriteBatch hudBatch;
     public BitmapFont font;
     private MapScreen mapScreen;
     public Race player;
@@ -23,6 +24,7 @@ public class GameName extends Game {
 
     public void create() {
         batch = new SpriteBatch();
+        hudBatch = new SpriteBatch();
         font = new BitmapFont();
         this.setScreen(new MainMenuScreen(this));
 
@@ -40,7 +42,7 @@ public class GameName extends Game {
             }
         }
 
-        //biome tileSet
+        //biome tileSet - each biome object should just create a map so its loaded in memory and just accessed
         splitTiles = TextureRegion.split(new Texture(Gdx.files.internal("Garden-TileSet.png")), 16,16);
 
         tid = 0; // starting tile id
@@ -60,6 +62,7 @@ public class GameName extends Game {
 
     public void dispose() {
         batch.dispose();
+        hudBatch.dispose();
         font.dispose();
     }
 

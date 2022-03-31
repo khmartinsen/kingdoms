@@ -17,10 +17,8 @@ public class Humans extends Race {
             new Asset(GOLD, 0.0, 1.0)
         };
 
-    //public static final String[] actions = {"(B)uild"};
-
     public Humans(String playerName, Biome startBiome) {
-        super("Humans", playerName, HumanBuilding.values(), new Kingdom(startBiome, defaultResources));
+        super("Humans", playerName, HumanBuilding.values(), startBiome);
     }
 
     public HumanBuilding[] getBuildings() { return HumanBuilding.values(); }
@@ -48,6 +46,7 @@ public class Humans extends Race {
     @Override
     public void addKingdom(Biome newBiome) {
         kingdoms.add(new Kingdom(newBiome, defaultResources));
+        addVisibleBiome(newBiome);
     }
 
     @Override
