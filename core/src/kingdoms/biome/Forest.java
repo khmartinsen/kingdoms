@@ -16,7 +16,7 @@ public class Forest extends Biome {
     @Override
     protected void generateBiomeTiles() {
         // base it on number of total tiles
-        int forestGrowths = rnd.nextInt(3) + 20; // rename to grass
+        int forestGrowths = rnd.nextInt(5) + 10;
         int rockGrowths = 7;
         int waterGrowths = 2;
 
@@ -27,7 +27,7 @@ public class Forest extends Biome {
 
         // grow GRASS numTreeGrowths times
         for (int i = 0; i < forestGrowths; i++) {
-            this.tileGrow(TREE, 30);
+            this.tileGrow(TREE, 20);
         }
 
         // rock generation
@@ -37,7 +37,7 @@ public class Forest extends Biome {
 
         // water generation
         for (int i = 0; i < waterGrowths; i++) {
-            this.tileGrow(WATER, 10);
+            this.tileGrow(WATER, 5);
         }
     }
 }

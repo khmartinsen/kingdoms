@@ -14,9 +14,9 @@ public class Plain extends Biome {
     @Override
     protected void generateBiomeTiles() {
         // base it on number of total tiles
-        int forestGrowths = 0; // rename to grass
-        int rockGrowths = 5;
-        int waterGrowths = 2;
+        int forestGrowths = 2;
+        int rockGrowths = 2;
+        int waterGrowths = 3;
 
         // create a Grass filled biome first
         for (kingdoms.tile.Tile[] tilesRow : tiles) {
@@ -25,7 +25,7 @@ public class Plain extends Biome {
 
         // grow TREE numTreeGrowths times
         for (int i = 0; i < forestGrowths; i++) {
-            this.tileGrow(TREE, 20);
+            this.tileGrow(TREE, 5);
         }
 
         // rock generation
@@ -35,7 +35,7 @@ public class Plain extends Biome {
 
         // water generation
         for (int i = 0; i < waterGrowths; i++) {
-            this.tileGrow(WATER, 20);
+            this.tileGrow(WATER, 5);
         }
     }
 }
