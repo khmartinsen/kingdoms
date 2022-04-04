@@ -33,7 +33,6 @@ public class MainMenuScreen implements Screen {
 
         if (Gdx.input.isTouched()) {
             MapScreen mapScreen = new MapScreen(game);
-            game.player = new Humans("Kevin", mapScreen.biomeMap.getBiome(0,0));
             game.setMapScreen(mapScreen);
             game.setScreen(mapScreen);
             dispose();

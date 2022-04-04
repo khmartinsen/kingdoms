@@ -20,6 +20,7 @@ import kingdoms.biome.Biome;
 import kingdoms.biome.BiomeMap;
 import kingdoms.biome.Forest;
 import kingdoms.biome.Plain;
+import kingdoms.race.HumanBuilding;
 import kingdoms.race.Humans;
 
 public class MapScreen implements Screen {
@@ -38,9 +39,9 @@ public class MapScreen implements Screen {
         // Create the map of biomes
         biomeMap = new BiomeMap(5, 5);
 
+        // Setup player
         game.player = new Humans("Kevin", biomeMap.getBiome(0,0));
-        // Create starting player buildings
-        //game.player.setup();
+        game.player.setup();
 
         MapLayers layers = map.getLayers();
         TiledMapTileLayer layer = new TiledMapTileLayer(5, 5, 16, 16);

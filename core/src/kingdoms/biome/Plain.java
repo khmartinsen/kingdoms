@@ -1,7 +1,8 @@
 package kingdoms.biome;
 
+import kingdoms.tile.TileEnum;
+
 import java.util.Arrays;
-import java.util.HashSet;
 
 import static kingdoms.biome.BiomeTile.*;
 
@@ -19,7 +20,7 @@ public class Plain extends Biome {
         int waterGrowths = 3;
 
         // create a Grass filled biome first
-        for (kingdoms.tile.Tile[] tilesRow : tiles) {
+        for (TileEnum[] tilesRow : tiles) {
             Arrays.fill(tilesRow, GRASS);
         }
 

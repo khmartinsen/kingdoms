@@ -43,7 +43,7 @@ public class GameName extends Game {
         }
 
         //biome tileSet - each biome object should just create a map so its loaded in memory and just accessed
-        splitTiles = TextureRegion.split(new Texture(Gdx.files.internal("Garden-TileSet.png")), 16,16);
+        splitTiles = TextureRegion.split(new Texture(Gdx.files.internal("biometiles.png")), 16,16);
 
         tid = 0; // starting tile id
         for (int j = 0; j < splitTiles.length; j++) {

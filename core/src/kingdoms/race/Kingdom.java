@@ -2,14 +2,14 @@ package kingdoms.race;
 
 import kingdoms.biome.Biome;
 import kingdoms.tile.BuildingTile;
-import kingdoms.tile.Tile;
+import kingdoms.tile.TileEnum;
 
 import java.util.ArrayList;
 import java.util.Map;
 
 public class Kingdom {
     private final Biome occupiedBiome;
-    private Tile[] buildings;
+    private TileEnum[] buildings;
     private ArrayList<Asset> resources = new ArrayList<Asset>(); // maybe this should be an EnumMap of <Resource, Asset>
     // population is a resource
 
@@ -91,6 +91,14 @@ public class Kingdom {
 
     public ArrayList<Asset> getResources() {
         return resources;
+    }
+
+    public String printResources() {
+        StringBuilder output = new StringBuilder();
+        for (Asset resource: resources) {
+            output.append(resource.getResource().toString() + ": " + resource.getAmount() + "\n");
+        }
+        return output.toString();
     }
 
     public Biome getBiome() { return occupiedBiome; }

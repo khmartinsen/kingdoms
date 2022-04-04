@@ -17,7 +17,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 import kingdoms.biome.BiomeMap;
 import kingdoms.biome.BiomeTile;
-import kingdoms.tile.Tile;
+import kingdoms.tile.TileEnum;
 
 public class DontUse extends ApplicationAdapter {
 	Texture tiles;
@@ -54,7 +54,7 @@ public class DontUse extends ApplicationAdapter {
 			for (int x = 0; x < tilesWidth; x++) {
 				xOffset = x * 20;
 				yOffset = y * 20;
-				Tile[][] biomeTiles = biomeMap.getBiome(x,y).getTiles();
+				TileEnum[][] biomeTiles = biomeMap.getBiome(x,y).getTiles();
 				for (int i = 0; i < biomeTiles.length; i++) {
 					for (int j = 0; j < biomeTiles[i].length; j++) {
 						TextureRegion specificTile;

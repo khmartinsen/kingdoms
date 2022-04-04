@@ -5,7 +5,7 @@ import java.util.Random;
 
 
 public abstract class Biome {
-    protected Tile[][] tiles; //maybe just int?
+    protected TileEnum[][] tiles; //maybe just int?
     private int[] tileOffset;
     private final MapTile mapTile;
     private final int[] mapLocation;
@@ -20,7 +20,7 @@ public abstract class Biome {
     // add a function that returns specific kingdom object(s) from occupied players
 
     private void generateBiomeShape() {
-        tiles = new Tile[20][20];
+        tiles = new TileEnum[20][20];
     }
 
     // Biome functions
@@ -32,7 +32,7 @@ public abstract class Biome {
      * @param col
      */
     // could include the logic of validBuildingLocation if we passed an override boolean (overloaded)
-    public void replaceTile(Tile newTile, int row, int col) {
+    public void replaceTile(TileEnum newTile, int row, int col) {
         tiles[row][col] = newTile;
     }
 
@@ -69,7 +69,7 @@ public abstract class Biome {
      * @param tile the tile we want to grow
      * @param iterations the more iterations leads to larger growth
      */
-    protected void tileGrow(final Tile tile, int iterations) {
+    protected void tileGrow(final TileEnum tile, int iterations) {
         int row = rnd.nextInt(tiles.length);
         int col = rnd.nextInt(tiles[row].length);
         tiles[row][col] = tile;
@@ -83,7 +83,7 @@ public abstract class Biome {
      * @param col
      * @param count (max) iterations to run
      */
-    private void recursiveTileGrow(final Tile tile, int row, int col, int count) {
+    private void recursiveTileGrow(final TileEnum tile, int row, int col, int count) {
         if (count < 0) {
             return;
         }
@@ -144,7 +144,7 @@ public abstract class Biome {
      */
     protected abstract void generateBiomeTiles();
 
-    public Tile[][] getTiles() {
+    public TileEnum[][] getTiles() {
         return tiles;
     }
 }

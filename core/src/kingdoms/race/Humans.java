@@ -52,8 +52,11 @@ public class Humans extends Race {
     @Override
     public void setup() {
         // game start setup, NEEDS TO BE REWORKED to be smart
-        getBiomes().get(0).replaceTile(HumanBuilding.CASTLE,10,10);
-        //inform mapScreen so we can draw a castle on the map screen?
+        Biome startBiome = getBiomes().get(0);
+        startBiome.replaceTile(HumanBuilding.CASTLE,10,10);
+        startBiome.replaceTile(HumanBuilding.HOUSE, 12,12);
+        startBiome.replaceTile(HumanBuilding.HOUSE, 9,9);
+        startBiome.replaceTile(HumanBuilding.HOUSE, 11,9);
     }
 
     /**

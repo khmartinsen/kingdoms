@@ -1,7 +1,8 @@
 package kingdoms.biome;
 
+import kingdoms.tile.TileEnum;
+
 import java.util.Arrays;
-import java.util.Random;
 
 import static kingdoms.biome.BiomeTile.*;
 
@@ -21,7 +22,7 @@ public class Forest extends Biome {
         int waterGrowths = 2;
 
         // create a TREE filled biome first
-        for (kingdoms.tile.Tile[] tilesRow : tiles) {
+        for (TileEnum[] tilesRow : tiles) {
             Arrays.fill(tilesRow, GRASS);
         }
 
