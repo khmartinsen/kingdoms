@@ -9,7 +9,10 @@ import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import kingdoms.biome.Biome;
 import kingdoms.race.HumanBuilding;
 import kingdoms.tile.TileEnum;
@@ -20,17 +23,21 @@ public class BiomeScreen implements Screen {
     TiledMap map = new TiledMap();
     TiledMapRenderer renderer;
     OrthographicCamera camera = new OrthographicCamera();
+    Stage stage;
+
+    boolean showMenu = false;
 
     public BiomeScreen(final Biome biome, final GameName game) {
         this.biome = biome;
         this.game = game;
+
+        stage = new Stage(new ScreenViewport());
 
         camera.setToOrtho(false, 20,20);
         camera.update();
 
         TileEnum[][] tiles = biome.getTiles();
 
-        map = new TiledMap();
         MapLayers layers = map.getLayers();
 
         TiledMapTileLayer layer = new TiledMapTileLayer(tiles[0].length, tiles.length, 16, 16);
@@ -70,6 +77,9 @@ public class BiomeScreen implements Screen {
             dispose();
         }
 
+        //stage.act(delta);
+        stage.draw();
+
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         highlightArea();
@@ -85,7 +95,7 @@ public class BiomeScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-    /* doesnt resize.
+    /* keeps the camera view from being skewed, fixed aspect ratio
         camera.viewportWidth = width / 16f;
         camera.viewportHeight = height / 16f;
         camera.update();
@@ -110,6 +120,7 @@ public class BiomeScreen implements Screen {
     @Override
     public void dispose() {
         map.dispose();
+        stage.dispose();
     }
 
     private void highlightTile() {

@@ -26,6 +26,8 @@ public class MainMenuScreen implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(0,0, .2f, 1);
         camera.update();
+
+        // ask for name and then we need to do a setup part for mapscreen (maybe another screen?)
         game.batch.begin();
         game.font.draw(game.batch, "KINGDOMS GAME", 100, 250);
         game.font.draw(game.batch, "Tap anywhere to start", 100, 150);

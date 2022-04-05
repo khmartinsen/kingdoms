@@ -64,6 +64,7 @@ public class GameName extends Game {
         batch.dispose();
         hudBatch.dispose();
         font.dispose();
+        mapScreen.dispose();
     }
 
     public void returnToMapScreen(){

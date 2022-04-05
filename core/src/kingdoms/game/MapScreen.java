@@ -16,6 +16,8 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import kingdoms.biome.Biome;
 import kingdoms.biome.BiomeMap;
 import kingdoms.biome.Forest;
@@ -26,6 +28,7 @@ import kingdoms.race.Humans;
 public class MapScreen implements Screen {
     final GameName game;
     OrthographicCamera camera = new OrthographicCamera();
+    Viewport viewport;
     TiledMapRenderer renderer;
     TiledMap map = new TiledMap();
     BiomeMap biomeMap;
@@ -33,8 +36,14 @@ public class MapScreen implements Screen {
 
     public MapScreen(final GameName game) { //take Race input for each player
         this.game = game;
-        camera.setToOrtho(false, 5,5);
+
+        float w = Gdx.graphics.getWidth();
+        float h = Gdx.graphics.getHeight();
+
+        camera.setToOrtho(false,5,5);
         camera.update();
+        //camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
+        viewport = new FitViewport(camera.viewportWidth,camera.viewportHeight, camera);
 
         // Create the map of biomes
         biomeMap = new BiomeMap(5, 5);
@@ -108,6 +117,8 @@ public class MapScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        //viewport.setScreenBounds( 0, 0, height, height);
+        viewport.update(width, height);
     }
 
     @Override
