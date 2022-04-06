@@ -1,35 +1,28 @@
 package kingdoms.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
-import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import kingdoms.biome.Biome;
 import kingdoms.biome.BiomeMap;
-import kingdoms.biome.Forest;
-import kingdoms.biome.Plain;
-import kingdoms.race.HumanBuilding;
 import kingdoms.race.Humans;
 
 public class MapScreen implements Screen {
     final GameName game;
     OrthographicCamera camera = new OrthographicCamera();
-    Viewport viewport;
-    TiledMapRenderer renderer;
+    Viewport gameView;
+    Viewport hudView;
+    public TiledMapRenderer renderer;
     TiledMap map = new TiledMap();
     BiomeMap biomeMap;
 
@@ -37,13 +30,11 @@ public class MapScreen implements Screen {
     public MapScreen(final GameName game) { //take Race input for each player
         this.game = game;
 
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
-
+        // setup camera and viewports
         camera.setToOrtho(false,5,5);
         camera.update();
-        //camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
-        viewport = new FitViewport(camera.viewportWidth,camera.viewportHeight, camera);
+        gameView = new FitViewport(5,5, camera); // probably want extend viewport with background
+
 
         // Create the map of biomes
         biomeMap = new BiomeMap(5, 5);
@@ -68,7 +59,6 @@ public class MapScreen implements Screen {
         // only show visible biomes
         for (Biome visibleBiome: game.player.getVisibleBiomes()) {
             int[] coords = visibleBiome.getMapLocation();
-            System.out.println("This thing: " + coords[0]);
             Cell cell = new Cell();
             cell.setTile(game.mapTileSet.getTile(visibleBiome.getMapTile().ordinal()));
             layer.setCell(coords[0], coords[1], cell);
@@ -85,11 +75,24 @@ public class MapScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        int w = Gdx.graphics.getWidth();
+        int h = Gdx.graphics.getHeight();
+
+        ScreenUtils.clear(0,0,0,1);
+        //gameView.setScreenX(0);
+
+        gameView.setScreenBounds(0,0,h,h);
+        gameView.apply();
+        camera.update();
+        game.batch.setProjectionMatrix(camera.combined);
+        renderer.setView(camera);
+        renderer.render();
+
         if (Gdx.input.justTouched()) {
             // after unprojecting the correct position is given for the input to choose a tile in the tile map
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            camera.unproject(touchPos);
+            gameView.unproject(touchPos);
 
             Biome clickedBiome = biomeMap.getBiome((int)touchPos.y, (int)touchPos.x);
 
@@ -99,11 +102,6 @@ public class MapScreen implements Screen {
             }
         }
 
-        ScreenUtils.clear(0,0,0,1);
-        camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
-        renderer.setView(camera);
-        renderer.render();
 
         game.batch.begin();
         highlightTile();
@@ -117,8 +115,10 @@ public class MapScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        //viewport.setScreenBounds( 0, 0, height, height);
-        viewport.update(width, height);
+        //gameView.setScreenBounds( 0, 0, height, height);
+        //gameView.setWorldSize(5,5);
+        //gameView.apply(true);
+        gameView.update(width, height);
     }
 
     @Override
@@ -141,15 +141,13 @@ public class MapScreen implements Screen {
     private void highlightTile() {
         Vector3 position = new Vector3();
         position.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-        camera.unproject(position);
-        position.x = (int)position.x;
-        position.y = (int)position.y;
-        game.batch.draw(game.mapTileSet.getTile(3).getTextureRegion(), position.x, position.y, 1, 1);
+        gameView.unproject(position);
+        game.batch.draw(game.mapTileSet.getTile(3).getTextureRegion(), (int)position.x, (int)position.y, 1, 1);
     }
     private void highlightText() {
         Vector3 position = new Vector3();
         position.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-        camera.unproject(position);
+        gameView.unproject(position);
         position.x = (int)position.x * (Gdx.graphics.getWidth() / 5);
         position.y = (int)position.y * (Gdx.graphics.getHeight() / 5);
         game.font.draw(game.hudBatch, "HERE", position.x, position.y);

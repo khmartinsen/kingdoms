@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import kingdoms.race.Humans;
@@ -69,6 +70,10 @@ public class GameName extends Game {
 
     public void returnToMapScreen(){
         this.setScreen(mapScreen);
+    }
+
+    public TiledMapRenderer getMapRenderer() {
+        return mapScreen.renderer;
     }
 
     public void setMapScreen(MapScreen mapScreen) {
