@@ -3,6 +3,7 @@ package kingdoms.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayers;
@@ -10,10 +11,11 @@ import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -33,25 +35,21 @@ public class BiomeScreen implements Screen {
     Viewport menuView;
     Viewport mapView;
     final int mapSizePixels = 2 * 5 * 16;
+    private int width;
+    private int height;
 
     Stage menuStage;
     Label resources;
 
-
-
     TiledMap map = new TiledMap();
+    boolean showBuildMenu = false;
 
     public BiomeScreen(final Biome biome, final GameName game) {
         this.biome = biome;
         this.game = game;
         this.renderer = biome.getRenderer();
 
-        // for viewport layouts
-
-         // 160
-
         // setup camera, viewport, and menu stage
-
         gameCamera.setToOrtho(false, 20,20); //change 20 to biome tiles variable
         gameView = new FitViewport(20,20, gameCamera);
 
@@ -60,63 +58,68 @@ public class BiomeScreen implements Screen {
 
         menuView = new FitViewport(mapSizePixels, Gdx.graphics.getHeight() - mapSizePixels);
         menuStage = new Stage(menuView);
+
         // menu stuff
         Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
         resources = new Label("temp", skin);
-        menuStage.addActor(resources);
+        Table table = new Table();
+        table.left().top();
+        table.setFillParent(true);
+        menuStage.addActor(table);
+        final TextButton buildButton = new TextButton("Build", skin);
+        table.add(resources).row();
+        table.add(buildButton).pad(10).align(Align.top).row();
+        table.setColor(Color.BLUE);
+
+        buildButton.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+                showBuildMenu = true;
+            }
+        });
+
 
     }
 
     @Override
     public void show() {
-
+        width = Gdx.graphics.getWidth();
+        height = Gdx.graphics.getHeight();
     }
 
     @Override
     public void render(float delta) {
-        int w = Gdx.graphics.getWidth();
-        int h = Gdx.graphics.getHeight();
-
-        Vector3 cursorPos = new Vector3();
-        cursorPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-        mapView.unproject(cursorPos);
-
         ScreenUtils.clear(0,0,0,1);
 
-        gameView.setScreenBounds(0,0, w - mapSizePixels,h);
-        gameView.apply();
-        gameCamera.update();
-        renderer.setView(gameCamera);
-        renderer.render();
+        if (Gdx.input.justTouched()) {
+            Vector3 cursorPos = new Vector3();
+            cursorPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            mapView.unproject(cursorPos);
+        }
 
-        game.batch.setProjectionMatrix(gameCamera.combined);
-        game.batch.begin();
-        highlightArea();
-        highlightTile(Biome.getTileSet().getTile(HumanBuilding.HOUSE.getTileID()).getTextureRegion());
-        //highlightTile();
-        game.batch.end();
+        //draw game / biome
+        drawGame();
 
-
-        // map view
-        mapView.setScreenBounds(w - mapSizePixels, h - mapSizePixels, mapSizePixels, mapSizePixels);
+        // draw map view
+        mapView.setScreenBounds(width - mapSizePixels, height - mapSizePixels, mapSizePixels, mapSizePixels);
         mapView.apply();
         game.getMapRenderer().setView(mapCamera);
         game.getMapRenderer().render();
 
-
-        menuView.setScreenBounds(w - mapSizePixels, 0, mapSizePixels, h - mapSizePixels);
-        menuView.apply();
-        //stage.act(delta);
+        // draw menu
+        Gdx.input.setInputProcessor(menuStage);
+        menuView.setScreenBounds(width - mapSizePixels, 0, mapSizePixels, height - mapSizePixels);
+        menuView.apply(true);
         String resourceString = game.player.getKingdom(biome).printResources();
         resources.setText(resourceString);
-        resources.setY(h/2 - mapSizePixels);
         menuStage.draw();
 
 
+        /*
         if (Gdx.input.justTouched()) {
             game.returnToMapScreen();
             dispose();
         }
+         */
 
         /*
         game.hudBatch.begin();
@@ -130,7 +133,9 @@ public class BiomeScreen implements Screen {
     public void resize(int width, int height) {
         gameView.update(width, height);
         mapView.update(width,height);
-        menuView.update(width, height);
+        menuView.update(width, height, true);
+        this.width = width;
+        this.height = height;
     }
 
     @Override
@@ -152,6 +157,22 @@ public class BiomeScreen implements Screen {
     public void dispose() {
         map.dispose();
         menuStage.dispose();
+    }
+
+    private void drawGame() {
+        int min = Math.min(width - mapSizePixels, height);
+        gameView.setScreenBounds(0,0, min,min);
+        gameView.apply();
+        gameCamera.update();
+        renderer.setView(gameCamera);
+        renderer.render();
+
+        game.batch.setProjectionMatrix(gameCamera.combined);
+        game.batch.begin();
+        highlightArea();
+        highlightTile(Biome.getTileSet().getTile(HumanBuilding.HOUSE.getTileID()).getTextureRegion());
+        //highlightTile();
+        game.batch.end();
     }
 
     private void highlightTile() {
