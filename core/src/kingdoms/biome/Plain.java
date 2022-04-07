@@ -9,7 +9,6 @@ import static kingdoms.biome.BiomeTile.*;
 public class Plain extends Biome {
     public Plain(int row, int col) {
         super(MapTile.PLAIN, row, col);
-        generateBiomeTiles();
     }
 
     @Override

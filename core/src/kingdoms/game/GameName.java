@@ -29,29 +29,14 @@ public class GameName extends Game {
         font = new BitmapFont();
         this.setScreen(new MainMenuScreen(this));
 
-        // load in tileSet assets
-        //map tileSet
+        // load in map tile set
         TextureRegion[][] splitTiles = TextureRegion.split(new Texture(Gdx.files.internal("Garden-TileSet.png")), 16,16);
-
         int tid = 0; // starting tile id
         for (int j = 0; j < splitTiles.length; j++) {
             for (int i = 0; i < splitTiles[j].length; i++) {
                 final StaticTiledMapTile tile = new StaticTiledMapTile(splitTiles[j][i]);
                 tile.setId(tid);
                 mapTileSet.putTile(tid,tile);
-                tid++;
-            }
-        }
-
-        //biome tileSet - each biome object should just create a map so its loaded in memory and just accessed
-        splitTiles = TextureRegion.split(new Texture(Gdx.files.internal("biometiles.png")), 16,16);
-
-        tid = 0; // starting tile id
-        for (int j = 0; j < splitTiles.length; j++) {
-            for (int i = 0; i < splitTiles[j].length; i++) {
-                final StaticTiledMapTile tile = new StaticTiledMapTile(splitTiles[j][i]);
-                tile.setId(tid);
-                biomeTileSet.putTile(tid,tile);
                 tid++;
             }
         }

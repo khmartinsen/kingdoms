@@ -11,7 +11,6 @@ public class Forest extends Biome {
 
     public Forest(int row, int col) {
         super(MapTile.FOREST, row, col);
-        generateBiomeTiles();
     }
 
     @Override

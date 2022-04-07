@@ -44,6 +44,7 @@ public class BiomeScreen implements Screen {
     public BiomeScreen(final Biome biome, final GameName game) {
         this.biome = biome;
         this.game = game;
+        this.renderer = biome.getRenderer();
 
         // for viewport layouts
 
@@ -64,25 +65,6 @@ public class BiomeScreen implements Screen {
         resources = new Label("temp", skin);
         menuStage.addActor(resources);
 
-
-        TileEnum[][] tiles = biome.getTiles();
-
-        MapLayers layers = map.getLayers();
-
-        TiledMapTileLayer layer = new TiledMapTileLayer(tiles[0].length, tiles.length, 16, 16);
-        layer.setName("biome");
-
-        for (int y = 0; y < tiles.length; y++) {
-            for (int x = 0; x < tiles[y].length; x++) {
-                Cell cell = new Cell();
-                cell.setTile(game.biomeTileSet.getTile((tiles[y][x]).getTileID())); //need to change casting
-                layer.setCell(x, y, cell);
-            }
-        }
-
-        layers.add(layer);
-        layers.add(new TiledMapTileLayer(tiles[0].length, tiles.length, 16, 16)); // empty layer for glow
-        renderer = new OrthogonalTiledMapRenderer(map, 1 / 16f); // scaling is 1/16px
     }
 
     @Override
@@ -110,7 +92,7 @@ public class BiomeScreen implements Screen {
         game.batch.setProjectionMatrix(gameCamera.combined);
         game.batch.begin();
         highlightArea();
-        highlightTile(game.biomeTileSet.getTile(HumanBuilding.HOUSE.getTileID()).getTextureRegion());
+        highlightTile(Biome.getTileSet().getTile(HumanBuilding.HOUSE.getTileID()).getTextureRegion());
         //highlightTile();
         game.batch.end();
 

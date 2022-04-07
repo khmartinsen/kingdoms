@@ -45,7 +45,7 @@ public class MapScreen implements Screen {
 
         MapLayers layers = map.getLayers();
         TiledMapTileLayer layer = new TiledMapTileLayer(5, 5, 16, 16);
-        layer.setName("map");
+        //layer.setName("map");
 
         // fill with fog of war tiles
         for (int y = 0; y < 5; y++) {
@@ -136,6 +136,7 @@ public class MapScreen implements Screen {
     @Override
     public void dispose() {
         map.dispose();
+        //biomeMap.dispose();
     }
 
     private void highlightTile() {
