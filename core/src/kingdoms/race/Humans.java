@@ -23,26 +23,6 @@ public class Humans extends Race {
 
     public HumanBuilding[] getBuildings() { return HumanBuilding.values(); }
 
-    /**
-     * Returns a string array containing the index and the corresponding HumanBuilding
-     * @return arrayIndex) BuildingTileName
-     */
-    // should this be in Kingdom instead?
-    public String[] buildOptions() {
-        String[] optionsArray = new String[HumanBuilding.values().length];
-        //optionsArray[0] = " - - - BUILD OPTIONS - - - ";
-        for (int i = 0; i < optionsArray.length; i++) {
-            StringBuilder line = new StringBuilder();
-            HumanBuilding building = HumanBuilding.values()[i];
-            line.append((i) + ") " + building.name() + " | ");
-            for (Map.Entry<Resource, Double> mapEntry : building.getResourceCost().entrySet()) {
-                line.append(mapEntry.getKey().name() + ": " + mapEntry.getValue().intValue() + " ");
-            }
-            optionsArray[i] = line.toString();
-        }
-        return optionsArray;
-    }
-
     @Override
     public void addKingdom(Biome newBiome) {
         kingdoms.add(new Kingdom(newBiome, defaultResources));
@@ -58,6 +38,19 @@ public class Humans extends Race {
         startBiome.replaceTile(HumanBuilding.HOUSE, 9,9);
         startBiome.replaceTile(HumanBuilding.HOUSE, 11,9);
     }
+
+    /*
+    private boolean buildCastle(Biome biome, int row, int col) {
+        // row and col is the bottom right of the castle location
+
+        //replace biome tiles
+        biome.replaceTile(HumanBuilding.CASTLE, int row);
+
+        for (int id = 15; id >= 8; id--) {
+            biome.replaceTile();
+        }
+    }
+    */
 
     /**
      * (NOT IMPLEMENTED YET)
